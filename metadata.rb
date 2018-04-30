@@ -6,5 +6,15 @@ description 'Amazon EC2 Simple Systems Manager (SSM) agent'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 issues_url 'https://github.com/JonathanSerafini/chef-ssm_agent/issues'
 source_url 'https://github.com/JonathanSerafini/chef-ssm_agent'
-version '0.1.0'
+version '0.1.1'
+
+supports 'amazon'
+supports 'ubuntu',   ' >= 12.04'
+supports 'debian',   ' >= 6.0'
+supports 'centos',   ' >= 5.0'
+supports 'redhat',   ' >= 5.0'
+supports 'oracle',   ' >= 6.4'
+supports 'suse',     ' >= 11.0'
+supports 'windows',  ' >= 2012r2'
+
 depends 'logrotate'
