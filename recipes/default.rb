@@ -1,2 +1,4 @@
 include_recipe "#{cookbook_name}::install"
-include_recipe "#{cookbook_name}::logrotate"
+if node['os'] == 'linux'
+  include_recipe "#{cookbook_name}::logrotate"
+end
