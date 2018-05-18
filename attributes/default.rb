@@ -15,9 +15,13 @@ default['ssm_agent'].tap do |config|
     config['region'],
     config['package']['version'],
     value_for_platform_family('rhel' => 'linux_amd64',
-                              'debian' => 'debian_amd64'),
+                              'amazon' => 'linux_amd64',
+                              'debian' => 'debian_amd64',
+                              'windows' => 'windows_amd64'),
     value_for_platform_family('rhel' => 'amazon-ssm-agent.rpm',
-                              'debian' => 'amazon-ssm-agent.deb')
+                              'amazon' => 'amazon-ssm-agent.rpm',
+                              'debian' => 'amazon-ssm-agent.deb',
+                              'windows' => 'AmazonSSMAgentSetup.exe')
   )
 
   # Path where the package is downloaded to
@@ -25,7 +29,9 @@ default['ssm_agent'].tap do |config|
   config['package']['path'] = ::File.join(
     Chef::Config['file_cache_path'],
     value_for_platform_family('rhel' => 'amazon-ssm-agent.rpm',
-                              'debian' => 'amazon-ssm-agent.deb')
+                              'amazon' => 'amazon-ssm-agent.rpm',
+                              'debian' => 'amazon-ssm-agent.deb',
+                              'windows' => 'AmazonSSMAgentSetup.exe')
   )
 
   # Checksum of the package
@@ -39,12 +45,13 @@ default['ssm_agent'].tap do |config|
   #              '5052f18e58'
   # )
 
-  # Name of the agent service
+  # set agent on windows
   # @since 0.1.0
-  config['service']['name'] = 'amazon-ssm-agent'
-
-  # Actions to set the agent to
-  # * Note: We set this to disable / start to provide faster boot times
-  # @since 0.1.0
-  config['service']['actions'] = %w(disable start)
+  if node['platform'] == 'windows'
+      config['service']['name'] = 'AmazonSSMAgent'
+      config['service']['actions'] = %w(enable start)
+  else
+      config['service']['name'] = 'amazon-ssm-agent'
+      config['service']['actions'] = %w(enable start)
+  end
 end
